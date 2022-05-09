@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Azure.AI.TextAnalytics;
 using Microsoft.Azure.Storage.Blob;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
@@ -16,10 +17,10 @@ namespace Serverless.Indexer
             log.LogInformation($"C# Blob trigger function Processed blob\n Name:{name} \n URI: {myBlob.Uri.ToString()} Bytes");
 
             Document d = new Document();
-                d.Id = myBlob.Uri.ToString();
-                d.Content = p.Parse.Text.Content;
-                d.Title = p.Parse.Title;
-                d.Source = "cosmos";
+                d.Id = Base64EncodeString(myBlob.Uri.ToString());
+                d.Content = await ComputerVisionHelper.ReadFile(myBlob);
+                d.Title = name;
+                d.Source = "blob";
 
                 //call enrichment pipeline (skillset)
                 d.Languages = await TextAnalyticsHelper.DetectLanguageInput(d.Content);
@@ -28,7 +29,7 @@ namespace Serverless.Indexer
                 d.Entities = await TextAnalyticsHelper.DetectedEntities(d.Content);
                 d.RedactedText = await TextAnalyticsHelper.RedactedText(d.Content);
 
-                var summary = await TextAnalyticsHelper.ExtractSummaryResultsAsync(p.Parse.Text.Content);
+                var summary = await TextAnalyticsHelper.ExtractSummaryResultsAsync(d.Content);
                 d.Summary = "";
                 foreach(SummarySentence s in summary)
                 {
@@ -41,6 +42,12 @@ namespace Serverless.Indexer
                 //upsert into search index
                 // SearchIndexHelper.CreateOrUpdateIndex("wikipedia");
                 SearchIndexHelper.UploadDocuments(d);
+        }
+
+        private string Base64EncodeString(string plainText)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
         }
     }
 }

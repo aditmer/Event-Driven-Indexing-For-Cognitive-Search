@@ -39,7 +39,7 @@ namespace Serverless.Indexer
                 d.Entities = await TextAnalyticsHelper.DetectedEntities(d.Content);
                 d.RedactedText = await TextAnalyticsHelper.RedactedText(d.Content);
 
-                var summary = await TextAnalyticsHelper.ExtractSummaryResultsAsync(p.Parse.Text.Content);
+                var summary = await TextAnalyticsHelper.ExtractSummaryResultsAsync(d.Content);
                 d.Summary = "";
                 foreach(SummarySentence s in summary)
                 {
