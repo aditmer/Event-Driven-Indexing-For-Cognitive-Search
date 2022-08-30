@@ -22,7 +22,7 @@ namespace Serverless.Indexer
                 d.Title = name;
                 d.Source = "blob";
 
-                //call enrichment pipeline (skillset)
+                //call Cognitive Services (skillset replacement)
                 d.Languages = await TextAnalyticsHelper.DetectLanguageInput(d.Content);
                 // d.Sentiments = await TextAnalyticsHelper.DetectedSentiment(d.Content);
                 d.KeyPhrases = await TextAnalyticsHelper.DetectedKeyPhrases(d.Content);
