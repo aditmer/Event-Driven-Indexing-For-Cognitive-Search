@@ -20,11 +20,13 @@ The demo creates two functions, deployed to an Azure Function app configured for
 
 + Visual Studio Code, with a C# extension and .NET Core
 + Azure.Search.Documents library from the Azure SDK for .NET
-+ An Azure Function app, with a runtime stack of .NET 6 on a Windows operating system
 + Azure Cognitive Search, Basic or above
 + Azure Cognitive Services, multi-region
 + Azure Cosmos DB (SQL API), with a database and container named "trigger-indexing-demo"
 + Azure Storage, with a blob container named "trigger-indexing-demo"
++ An Azure Function app, with a runtime stack of .NET 6 on a Windows operating system
+
+  :::image type="content" source="readme-images/create-function-app.png" alt-text="Screenshot of the create function app":::
 
 ## Set up demo data
 
