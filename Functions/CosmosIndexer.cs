@@ -32,7 +32,7 @@ namespace Serverless.Indexer
                 d.Title = p.Parse.Title;
                 d.Source = "cosmos";
 
-                //call Cognitive Services (skillset replacement)
+                // Call Cognitive Services (skillset replacement)
                 d.Languages = await TextAnalyticsHelper.DetectLanguageInput(d.Content);
                 // d.Sentiments = await TextAnalyticsHelper.DetectedSentiment(d.Content);
                 d.KeyPhrases = await TextAnalyticsHelper.DetectedKeyPhrases(d.Content);
@@ -46,10 +46,10 @@ namespace Serverless.Indexer
                     d.Summary += s.Text + " ...\n\n";
                 }
 
-                //knowledge store
+                // Store the Cognitive Services output in Cosmos DB (KnowledgeStore database)
                 await KnowledgeStoreHelper.UpsertDocumentAsync(d);
 
-                //upsert into search index
+                // Send KnowledgeStore content to Cognitive Search for indexing
                 SearchIndexHelper.CreateOrUpdateIndex("wikipedia");
                 SearchIndexHelper.UploadDocuments(d);
             }

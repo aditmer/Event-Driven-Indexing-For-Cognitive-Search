@@ -2,19 +2,21 @@
 
 This C# sample is an Azure Function app that demonstrates how to implement event-driving indexing in Azure Cognitive Search. If you've run into limitations using the indexer and skillset features of Azure Cognitive Search, this demo shows you an alternative for achieving similar outcomes:
 
-+ Indexers are schedule-based, whereas this demo triggers indexing from an event. In this example, the event is data ingestion into a source database,
++ Indexers pull data from supported data sources on demand or on a schedule. In contrast, this example uses the push APIs of Cognitive Search, eliminating constraints around frequency, duration, volume, and platform. In this example, event-driven indexing is triggered by data updates in the source database.
 
-+ Indexing (creating and loading a search index) uses the push APIs of Cognitive Search. Indexing through a push API eliminates constraints around frequency, duration, and volume.
-
-+ If your scenario requires AI enrichment, you can replace a skillset by making direct calls to Cognitive Services. To illustrate this technique, the demo invokes Computer Vision and Text Analytics for sentiment analysis.
++ Indexers drive the native AI enrichment capabilities of COgnitive Search. If your scenario requires AI enrichment but you can't use indexers, you can replace a skillset by making direct calls to Cognitive Services. To illustrate this technique, the demo invokes Text Analytics for language detection, entity recognition, and sentiment analysis. It also invokes Computer Vision for ???
 
 ## Objects created in this demo
 
-The demo creates two functions, deployed to an Azure Function app configured for .NET. It also creates a search index in Azure Cognitive Search.
+This demo creates the following assets in your Azure resources.
 
-+ A CosmosIndexer function that triggers search indexing from your Cosmos DB database
-+ A BlobIndexer function that triggers search indexing from a blob container
-+ A search index based on the schema provided in DocumentModel.cs.
++ A function app containing two functions:
+  + BlobIndexer triggers search indexing when content is added to blob container ("pages")
+  + CosmosIndexer function that triggers search indexing from your Cosmos DB database. Cosmos DB databases are also used in this workflow to store input and output data.
+
++ Storage for input data ("pages"), enriched content produced by Cognitive Services ("knowledgeStore").
+
++ A search index based on the schema provided in DocumentModel class is created in your search service.
 
 ## Prerequisites
 
@@ -24,9 +26,15 @@ The demo creates two functions, deployed to an Azure Function app configured for
 + Azure Cognitive Services, multi-region
 + Azure Cosmos DB (SQL API), with a database and container named "trigger-indexing-demo"
 + Azure Storage, with a blob container named "trigger-indexing-demo"
-+ An Azure Function app, with a runtime stack of .NET 6 on a Windows operating system
++ An Azure Function app, with a runtime stack of .NET 6 on a Windows operating system. The following screenshot illustrates the configuration.
 
-  :::image type="content" source="readme-images/create-function-app.png" alt-text="Screenshot of the create function app":::
+  :::image type="content" source="readme-images/create-function-app.png" alt-text="Screenshot of the create function app.":::
+
+## Workflow
+
+Event-based indexing is driven by the function app. The function app watches the "pages" container. When a document is added or updated, the event triggers the function to run.  
+
+The "knowledgestore" container is where the enriched documents are collected, after calling Cognitive Services, and before sending it to the search index.
 
 ## Set up demo data
 
@@ -48,20 +56,17 @@ Modify **local.settings.json** to include the connection information needed to r
 1. For "KS_Cosmos_Endpoint", "KS_Cosmos_Key", "KS_Cosmos_DB", and "KS_Cosmos_Container", get the individual values from **Data Explorer** and the **Keys** page. 
 1. For "Search_Service_Name" and "Search_Admin_Key", navigate to your search service. Get the full URL endpoint from the **Overview** page. Get the admin API key from the **Keys** page. This demo creates a search index on your search service using the "Search_Index_Name" that you provide.
 
-
-Sample data?
-
 ## Run the sample
 
 TO DO
 
+## Deploy to Azure
+
+1. Fill in **appsettings.json** with the connection information necessary to reach all Azure resources. The entries are similar to local.settings.json, but these entries will be read by your app once it's deployed on Azure.
+
+1. In Visual Studio Code, right-click the function app and select **Deploy to Azure**.
+
 ## Explore the code
-
-### Trigger indexing based on data updates
-
-TO DO
-
-### Trigger applied AI
 
 TO DO
 
