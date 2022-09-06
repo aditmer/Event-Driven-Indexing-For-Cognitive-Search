@@ -37,7 +37,7 @@ This demo creates the following assets in your Azure resources.
 
 + In Cosmos DB, a "Wikipedia" database with one container for input data ("pages") and  a second container for workflow state ("leases")
 
-+ In Azure Cognitive Search, a search index named "wikipedia", based on the schema provided in DocumentModel class
++ In Azure Cognitive Search, a search index, based on the schema provided in DocumentModel class and the name provided in the JSON settings file
 
 ## Run the project locally
 
