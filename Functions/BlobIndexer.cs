@@ -36,10 +36,10 @@ namespace Serverless.Indexer
                     d.Summary += s.Text + " ...\n\n";
                 }
 
-                // Store the Cognitive Services output in Cosmos DB (KnowledgeStore database)
+                // Store enriched output in Cosmos DB (KnowledgeStore database)
                 await KnowledgeStoreHelper.UpsertDocumentAsync(d);
 
-                //upsert into search index
+                // Index enriched content in Cognitive Search
                 // SearchIndexHelper.CreateOrUpdateIndex("wikipedia");
                 SearchIndexHelper.UploadDocuments(d);
         }

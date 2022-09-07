@@ -8,7 +8,7 @@ This demo is based on a [serverless event-based architecture with Azure Cosmos D
 
 + When a data update is detected, the function app starts an indexing and enrichment process:
 
-  + First, the app calls Cognitive Services to enrich the content. It uses the Computer Vision OCR API to "crack" the document and find text. It then uses [Azure Cognitive Service for Language](https://docs.microsoft.com/azure/cognitive-services/language-service/overview) for language detection, entity recognition, and sentiment analysis. The enriched output is stored in a new blob container in Azure Storage.
+  + First, the app calls Cognitive Services to enrich the content. It uses the Computer Vision OCR API to "crack" the document and find text. It then calls [Azure Cognitive Service for Language](https://docs.microsoft.com/azure/cognitive-services/language-service/overview) for language detection, entity recognition, and sentiment analysis. The enriched output is stored in a new blob container in Azure Storage.
 
   + Second, the app makes an indexing call to Azure Cognitive Search, indexing the enriched content created in the previous step. The search index in Azure Cognitive Search is updated to include the new information. The demo uses the [**Azure.Search.Documents**](https://www.nuget.org/packages/Azure.Search.Documents/) library from the Azure SDK for .NET to create, load, and query the search index.
 
