@@ -1,6 +1,8 @@
 # Use an event-driven trigger for indexing in Azure Cognitive Search
 
-This C# sample is an Azure Function app that demonstrates event-driven indexing in Azure Cognitive Search. If you've used indexers and skillsets before, you know that indexers can run on demand or on a schedule, but not in response to events. This demo shows you how to set up an indexing pipeline that responds to data update events. Instead of an indexer, the demo uses a function app that listens for data updates in Cosmos DB or Blob Storage. Instead of skillsets (which are indexer-driven), this demo makes direct calls to Cognitive Services. The enriched output is sent to a different Cosmos DB database. From there, the data is pushed into a queryable search index in Cognitive Search.
+This C# sample is an Azure Function app that demonstrates event-driven indexing in Azure Cognitive Search. If you've used indexers and skillsets before, you know that indexers can run on demand or on a schedule, but not in response to events. This demo shows you how to set up an indexing pipeline that responds to data update events. 
+
+Instead of an indexer, the demo uses a function app that listens for data updates in Cosmos DB or Blob Storage. Instead of skillsets (which are indexer-driven), this demo makes direct calls to Cognitive Services. The enriched output is sent to a different Cosmos DB database. From there, the data is pushed into a queryable search index in Cognitive Search.
 
 To trigger this workflow, you'll add data to either Cosmos DB or Blob Storage. Either event starts the workflow. When all processing is complete, you should be able to query a search index for content from the page.
 
@@ -15,7 +17,7 @@ To trigger this workflow, you'll add data to either Cosmos DB or Blob Storage. E
 + [Azure Storage](https://docs.microsoft.com/azure/storage/common/storage-account-create)
 + An [Azure Function app](https://docs.microsoft.com/azure/azure-functions/functions-create-function-app-portal#create-a-function-app), with a runtime stack of .NET 6 on a Windows operating system. The following screenshot illustrates the configuration.
 
-  :::image type="content" source="readme-images/create-function-app.png" alt-text="Screenshot of the create function app.":::
+   ![Screenshot of the create function app.](readme-images/create-function-app.png)
 
 ## Set up storage and get connection information
 
@@ -27,15 +29,11 @@ Use Azure portal to create databases and containers for storing data in COsmos D
 
    ![Screenshot of Cosmos DB Data Explorer with databases and containers.](readme-images/cosmos-db-setup.png)
 
-   :::image type="content" source="readme-images/cosmos-db-setup.png" alt-text="Screenshot of Cosmos DB Data Explorer with databases and containers.":::
-
 1. While in Cosmos DB, open the **Keys** page and get a full connection string for account. Also copy the individual values for the key and URI.
 
 1. In Azure Storage, use **Storage browser** to create a container named "wikipedia-documents". This container will store Wikipedia pages as PDF files.
 
    ![Screenshot of blob container for storing Wikipedia files..](readme-images/blob-container.png)
-
-   :::image type="content" source="readme-images/blob-container.png" alt-text="Screenshot of Azure Storage with the blob container for storking Wikipedia files.":::
 
 1. While in Azure Storage, open the **Access keys** page and get a full connection string for account.
 
@@ -49,7 +47,7 @@ Use Azure portal to create databases and containers for storing data in COsmos D
 
    + For "AzureWebJobsStorage", navigate to your function app. Get the "AzureWebJobsStorage" connection string from the **Configuration** page.
 
-     :::image type="content" source="readme-images/app-web-jobs-storage-connection-string.png" alt-text="Screenshot of the configuration page.":::
+     ![Screenshot of the configuration page.](readme-images/app-web-jobs-storage-connection-string.png)
 
    + For "serverlessindexing_STORAGE", navigate to your Azure Storage account. Get the full connection string from the **Access keys** page. 
 
@@ -65,7 +63,7 @@ Use Azure portal to create databases and containers for storing data in COsmos D
 
 1. Wait for the lease to be acquired. 
 
-   :::image type="content" source="readme-images\wait-for-event.png" alt-text="Screenshot of terminal output with host lease acquired.":::
+    ![Screenshot of terminal output with host lease acquired.](readme-images\wait-for-event.png)
 
 1. At this point, return to Azure portal and upload either a JSON file to Cosmos DB ("pages" container in the "Wikipedia" database) or upload a PDF file to Azure Storage ("wikipedia-documents" in Blob Storage).
 
