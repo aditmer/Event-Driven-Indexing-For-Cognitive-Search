@@ -12,7 +12,7 @@ namespace Serverless.Indexer
     public class BlobIndexer
     {
         [FunctionName("BlobIndexer")]
-        public async Task Run([BlobTrigger("documents/{name}", Connection = "serverlessindexing_STORAGE")]CloudBlockBlob myBlob, string name, ILogger log)
+        public async Task Run([BlobTrigger("wikipedia-documents/{name}", Connection = "serverlessindexing_STORAGE")]CloudBlockBlob myBlob, string name, ILogger log)
         {
             log.LogInformation($"C# Blob trigger function Processed blob\n Name:{name} \n URI: {myBlob.Uri.ToString()} Bytes");
 
@@ -22,12 +22,12 @@ namespace Serverless.Indexer
                 d.Title = name;
                 d.Source = "blob";
 
-                // Call Cognitive Services (skillset replacement)
+                // Call Cognitive Services  for enrichment (skillset replacement)
                 d.Languages = await TextAnalyticsHelper.DetectLanguageInput(d.Content);
                 // d.Sentiments = await TextAnalyticsHelper.DetectedSentiment(d.Content);
                 d.KeyPhrases = await TextAnalyticsHelper.DetectedKeyPhrases(d.Content);
                 d.Entities = await TextAnalyticsHelper.DetectedEntities(d.Content);
-                d.RedactedText = await TextAnalyticsHelper.RedactedText(d.Content);
+                // d.RedactedText = await TextAnalyticsHelper.RedactedText(d.Content);
 
                 var summary = await TextAnalyticsHelper.ExtractSummaryResultsAsync(d.Content);
                 d.Summary = "";
@@ -40,7 +40,7 @@ namespace Serverless.Indexer
                 await KnowledgeStoreHelper.UpsertDocumentAsync(d);
 
                 // Index enriched content in Cognitive Search
-                // SearchIndexHelper.CreateOrUpdateIndex("wikipedia");
+                // SearchIndexHelper.CreateOrUpdateIndex("wikipedia-index");
                 SearchIndexHelper.UploadDocuments(d);
         }
 

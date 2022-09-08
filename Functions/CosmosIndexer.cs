@@ -32,12 +32,12 @@ namespace Serverless.Indexer
                 d.Title = p.Parse.Title;
                 d.Source = "cosmos";
 
-                // Call Cognitive Services (skillset replacement)
+                // Call Cognitive Services for enrichment (skillset replacement)
                 d.Languages = await TextAnalyticsHelper.DetectLanguageInput(d.Content);
                 // d.Sentiments = await TextAnalyticsHelper.DetectedSentiment(d.Content);
                 d.KeyPhrases = await TextAnalyticsHelper.DetectedKeyPhrases(d.Content);
                 d.Entities = await TextAnalyticsHelper.DetectedEntities(d.Content);
-                d.RedactedText = await TextAnalyticsHelper.RedactedText(d.Content);
+                // d.RedactedText = await TextAnalyticsHelper.RedactedText(d.Content);
 
                 var summary = await TextAnalyticsHelper.ExtractSummaryResultsAsync(d.Content);
                 d.Summary = "";
@@ -50,7 +50,7 @@ namespace Serverless.Indexer
                 await KnowledgeStoreHelper.UpsertDocumentAsync(d);
 
                 // Index enriched content in Cognitive Search
-                SearchIndexHelper.CreateOrUpdateIndex("wikipedia");
+                SearchIndexHelper.CreateOrUpdateIndex("wikipedia-index");
                 SearchIndexHelper.UploadDocuments(d);
             }
         }
