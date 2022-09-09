@@ -4,7 +4,7 @@ This C# sample is an Azure Function app that demonstrates event-driven indexing 
 
 Instead of an indexer, the demo uses a function app that listens for data updates in Cosmos DB or Blob Storage. Instead of skillsets (which are indexer-driven), this demo makes direct calls to Cognitive Services. The enriched output is sent to a different Cosmos DB database. From there, the data is pushed into a queryable search index in Cognitive Search.
 
-To trigger this workflow, you'll start the app and then upload files to either Cosmos DB or Blob Storage. Either one starts the workflow. When all processing is complete, you should be able to query a search index for content from the page.
+To trigger this workflow, you'll start the app and then upload files to either Cosmos DB or Blob Storage. Either one starts the workflow. When all processing is complete, you should be able to query a search index for content.
 
 [Sample data](/sample-data/) consists of pages from Wikipedia about famous deserts (Sahara, Sonoran, and so forth). Files are provided in PDF and JSON format. JSON files should be uploaded to the "pages" container in Cosmos DB. PDFs should be uploaded to the "wikipedia-documents" container in Azure Storage.
 
@@ -80,6 +80,8 @@ Use Azure portal to create databases and containers for storing data in Cosmos D
 Besides the output that appears in the terminal session in Visual Studio Code, you can check your Azure resources:
 
 1. In Cosmos DB, check "Wikipedia-Knowledge-Store/enriched-output" to verify that Cognitive Services output was generated.
+
+   ![Screenshot of enriched output.](readme-images/enriched-output.png)
 
 1. In Azure Cognitive Search, open **Search Explorer** and find the "wikipedia-index". You can select **Search** to run an empty query that returns all content, or you paste in this query for brevity: `search="hottest desert"&$select=Title, Summary&$count=true`
 
