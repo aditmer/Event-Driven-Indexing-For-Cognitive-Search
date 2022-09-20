@@ -13,6 +13,7 @@ using Microsoft.Azure.Storage.Blob;
 namespace Serverless.Indexer
 {
 	
+    // Use OCR's ReadFile API to extract text from PDF blobs
 	public class ComputerVisionHelper
 	{
 		private static string subscriptionKey = Environment.GetEnvironmentVariable("Cog_Service_Key");

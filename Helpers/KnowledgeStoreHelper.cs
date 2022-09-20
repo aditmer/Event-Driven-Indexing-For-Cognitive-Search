@@ -16,7 +16,7 @@ namespace Serverless.Indexer
         // An existing Cosmos DB database for storing enriched output
         private static Database database = cosmosClient.GetDatabase(Environment.GetEnvironmentVariable("KS_Cosmos_DB"));
 
-        // An existing container to stored enriched output for each document
+        // An existing container to store enriched output for each document
         private static Container container = database.GetContainer(Environment.GetEnvironmentVariable("KS_Cosmos_Container"));
 
 		public async static Task UpsertDocumentAsync(Document doc)
